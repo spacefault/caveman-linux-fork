@@ -220,6 +220,43 @@ void makeUser() {
         break;
     } while (true);
 }
+void makeUserPassword() {
+    system("clear");
+
+    std::cout << "\033[1mUser Configuration - Configuring Passwords - Caveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "This screen will assist you in setting up a password for your system." << std::endl;
+    std::cout << "The password you choose will also be used for the root account on the computer." << std::endl << std::endl;
+    std::cout << "Your password must be at least 10 characters long, must contain 2 special characters, and must have 3 uppercase letters." << std::endl;
+    std::cout << "Make sure this password is secure and complicated, write it down, and DO NOT SHARE IT TO ANYONE." << std::endl << std::endl;
+    std::cout << "Please enter your password now:" << std::endl;
+
+    while (true) {
+        std::string password;
+        std::cout << ">>> ";
+        std::cin >> password;
+        int specialCharCount = 0;
+        int capitalLetterCount = 0;
+        if (password.length() < 10) {
+            std::cout << "\033[1;31mPassword does not meet the requirements. Please try again.\033[0m" << std::endl;
+            continue;
+        }
+        for (char c : password) {
+            if (!isalnum(c) && c != ' ') {
+                specialCharCount++;
+            }
+            if (isupper(c)) {
+                capitalLetterCount++;
+            }
+        }
+        if (specialCharCount >= 2 && capitalLetterCount >= 3) {
+            std::cout << "\033[1;32mPassword is valid! Resuming installation...\033[0m" << std::endl;
+            break; // Break out of the loop if the password is valid
+        } else {
+            std::cout << "\033[1;31mPassword does not meet the requirements. Please try again.\033[0m" << std::endl;
+        }
+    }
+}
 
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
@@ -230,5 +267,6 @@ int main() {
     timezoneSetup();
     localeSetup();
     makeUser();
+    makeUserPassword();
     return 0;
 }
