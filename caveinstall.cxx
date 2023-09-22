@@ -217,9 +217,11 @@ void makeUser() {
             continue;
         }
         std::cout << "\033[1;32mUsername \"" << username << "\" is valid and can be used! Resuming installation...\033[0m" << std::endl;
+        sleep(5);
         break;
     } while (true);
 }
+
 void makeUserPassword() {
     system("clear");
 
@@ -251,6 +253,7 @@ void makeUserPassword() {
         }
         if (specialCharCount >= 2 && capitalLetterCount >= 3) {
             std::cout << "\033[1;32mPassword is valid! Resuming installation...\033[0m" << std::endl;
+            sleep(5);
             break; // Break out of the loop if the password is valid
         } else {
             std::cout << "\033[1;31mPassword does not meet the requirements. Please try again.\033[0m" << std::endl;
