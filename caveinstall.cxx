@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <fstream>
+#include <vector>
+#include <cctype>
+#include <algorithm>
 
 void checkUser() {
     uid_t uid = geteuid();
@@ -168,10 +172,53 @@ void localeSetup() {
 }
 
 void makeUser() {
+    std::vector<std::string> reservedUsernames;
+    std::string username;
+    std::ifstream file("reserved_usernames.txt");
+    std::string line;
+
+    while (std::getline(file, line)) {
+        reservedUsernames.push_back(line);
+    }
+
     system("clear");
-    std::cout << "This screen will help in creating a user" << std::endl;
-    std::cout << "" << std::endl;
-    return;
+
+    std::cout << "\033[1mUser Configration - Creating Users - Caveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "This screen will assist you in setting up a user account." << std::endl << std::endl;
+    std::cout << "Usernames may NOT begin with special characters or numbers." << std::endl;
+    std::cout << "Usernames may contain underscores, dashes, numbers, or mixed case letters." << std::endl << std::endl;
+    std::cout << "Please enter a username, and we will check for any errors." << std::endl;
+
+    do {
+        std::cout << ">>> ";
+        std::cin >> username;
+        if (std::find(reservedUsernames.begin(), reservedUsernames.end(), username) != reservedUsernames.end()) {
+            std::cout << "\033[1;31mThis username is reserved. Please choose a different one.\033[0m" << std::endl;
+            continue;
+        }
+        if (!isalpha(username[0])) {
+            std::cout << "\033[1;31mUsername must start with a letter (a-z or A-Z). Please choose a different one.\033[0m" << std::endl;
+            continue;
+        }
+        bool valid = true;
+        for (char c : username) {
+            if (!isalnum(c) && c != '-' && c != '_') {
+                valid = false;
+                break;
+            }
+        }
+        if (!valid) {
+            std::cout << "\033[1;31mUsername can only contain letters, digits, hyphens, or underscores. Please choose a different one.\033[0m" << std::endl;
+            continue;
+        }
+        if (username.length() > 30) {
+            std::cout << "\033[1;31mUsername cannot exceed 30 characters. Please choose a shorter one.\033[0m" << std::endl;
+            continue;
+        }
+        std::cout << "\033[1;32mUsername \"" << username << "\" is valid and can be used! Resuming installation...\033[0m" << std::endl;
+        break;
+    } while (true);
 }
 
 int main() {
@@ -182,5 +229,6 @@ int main() {
     mirrorSetup();
     timezoneSetup();
     localeSetup();
+    makeUser();
     return 0;
 }
