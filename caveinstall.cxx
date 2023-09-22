@@ -2,6 +2,22 @@
 #include <string>
 #include <unistd.h>
 
+void checkUser() {
+    uid_t uid = geteuid();
+    if (uid != 0) {
+        std::cerr << "\033[1;31mFATAL: Non root account detected!\033[0m" << std::endl << std::endl;
+        std::cerr << "You are not running the installer as the root user." << std::endl;
+        std::cerr << "This can result in a partial installation, and an unstable system." << std::endl;
+        std::cerr << "Please enter './cavemaninstaller' in the shell prompt, and try again." << std::endl << std::endl;
+        std::cerr << "If that's not working, you might have a corrupted ISO." << std::endl;
+        std::cerr << "Please redownload the ISO, and try again." << std::endl << std::endl;
+        std::cerr << "If you've done everything, and you're still seeing this error," << std::endl;
+        std::cerr << "Please report it to the Caveman Linux developers." << std::endl << std::endl;
+        std::cerr << "https://github.com/cavemandevs/caveman-linux/" << std::endl;
+        exit(1);
+    }
+}
+
 void welcome() {
     system("clear");
     std::cout << "\e[1mCaveman Linux Installation Assistant" << std::endl;
@@ -159,6 +175,7 @@ void makeUser() {
 }
 
 int main() {
+//    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
     welcome();
     netCheck();
     diskSetup();
