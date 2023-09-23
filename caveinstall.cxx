@@ -6,6 +6,14 @@
 #include <cctype>
 #include <algorithm>
 
+std::string targetDisk;
+std::string mirrorLocations;
+std::string timezonereal;
+std::string locale;
+std::string usernamereal;
+std::string password;
+
+
 void checkUser() {
     uid_t uid = geteuid();
     if (uid != 0) {
@@ -107,7 +115,6 @@ void diskSetup() {
     system("lsblk");
     std::cout << "\n Make sure to select a disk and not a partition. The disk should not have a number at the end. " << std::endl << std::endl;
     std::cout << "Please enter the disk where Caveman Linux will be installed" << std::endl;
-    std::string targetDisk;
     std::cout << ">>> " ;
     std::cin >> targetDisk;
 
@@ -129,7 +136,6 @@ void mirrorSetup() {
     std::cout << "\033[90mThe packages you download will only be visible to the mirror, and will NOT be visible to outside attackers, and it's not visible to Caveman Software.\033[0m" << std::endl;
     std::cout << "\033[90mThe mirror system uses HTTP Secure encryption layers to keep your package choices private.\033[0m" <<std::endl << std::endl;
     std::cout << "Please enter the country for your mirrors and then press ENTER" << std::endl;
-    std::string mirrorLocations;
     std::cout << ">>> ";
     std::cin >> mirrorLocations;
 
@@ -147,10 +153,8 @@ void timezoneSetup() {
     std::cout << "An example of a timezone code looks something like this:" << std::endl << std::endl;
     std::cout << "Canada/Mountain" << std::endl << std::endl;
     std::cout << "Enter the timezone code and press ENTER: " << std::endl;
-    std::string timezone;
     std::cout << ">>> ";
-    std::cin >> timezone;
-
+    std::cin >> timezonereal;
     return;
 }
 
@@ -165,7 +169,6 @@ void localeSetup() {
     std::cout << "English [US]       -->  en_US.UTF-8 UTF-8" << std::endl;
     std::cout << "French [Canadian]  -->  fr_CA.UTF-8 UTF-8" << std::endl << std::endl;
     std::cout << "Please enter the locale code, and press ENTER." << std::endl;
-    std::string locale;
     std::cout << ">>> ";
     std::cin >> locale;
     return;
@@ -173,7 +176,7 @@ void localeSetup() {
 
 void makeUser() {
     std::vector<std::string> reservedUsernames;
-    std::string username;
+    std::string usernamereal;
     std::ifstream file("reserved_usernames.txt");
     std::string line;
 
@@ -192,17 +195,17 @@ void makeUser() {
 
     do {
         std::cout << ">>> ";
-        std::cin >> username;
-        if (std::find(reservedUsernames.begin(), reservedUsernames.end(), username) != reservedUsernames.end()) {
+        std::cin >> usernamereal;
+        if (std::find(reservedUsernames.begin(), reservedUsernames.end(), usernamereal) != reservedUsernames.end()) {
             std::cout << "\033[1;31mThis username is reserved. Please choose a different one.\033[0m" << std::endl;
             continue;
         }
-        if (!isalpha(username[0])) {
+        if (!isalpha(usernamereal[0])) {
             std::cout << "\033[1;31mUsername must start with a letter (a-z or A-Z). Please choose a different one.\033[0m" << std::endl;
             continue;
         }
         bool valid = true;
-        for (char c : username) {
+        for (char c : usernamereal) {
             if (!isalnum(c) && c != '-' && c != '_') {
                 valid = false;
                 break;
@@ -212,11 +215,11 @@ void makeUser() {
             std::cout << "\033[1;31mUsername can only contain letters, digits, hyphens, or underscores. Please choose a different one.\033[0m" << std::endl;
             continue;
         }
-        if (username.length() > 30) {
+        if (usernamereal.length() > 30) {
             std::cout << "\033[1;31mUsername cannot exceed 30 characters. Please choose a shorter one.\033[0m" << std::endl;
             continue;
         }
-        std::cout << "\033[1;32mUsername \"" << username << "\" is valid and can be used! Resuming installation...\033[0m" << std::endl;
+        std::cout << "\033[1;32mUsername \"" << usernamereal << "\" is valid and can be used! Resuming installation...\033[0m" << std::endl;
         sleep(5);
         break;
     } while (true);
@@ -234,7 +237,6 @@ void makeUserPassword() {
     std::cout << "Please enter your password now:" << std::endl;
 
     while (true) {
-        std::string password;
         std::cout << ">>> ";
         std::cin >> password;
         int specialCharCount = 0;
