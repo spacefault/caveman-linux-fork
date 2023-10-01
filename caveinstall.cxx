@@ -6,12 +6,13 @@
 #include <cctype>
 #include <algorithm>
 
+std::string usernamereal;
 std::string targetDisk;
 std::string mirrorLocations;
 std::string timezonereal;
 std::string locale;
-std::string usernamereal;
 std::string password;
+// std::string usernamereal;
 
 
 void checkUser() {
@@ -263,6 +264,38 @@ void makeUserPassword() {
     }
 }
 
+void summary() {
+    system("clear");
+    std::cout << "\033[1mSummary - Caveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "These are the following settings that will be installed with your copy of Caveman Linux." << std::endl << std::endl;
+    std::cout << "Partitioning" << std::endl;
+    std::cout << "├─Target disk [**WILL BE ERASED**]: " << targetDisk << std::endl;
+    std::cout << "├─Swap Size: 16G" << std::endl;
+    std::cout << "└─Filesystem: btrfs" << std::endl;
+    std::cout << "  ├─Subvolume: @" << std::endl;
+    std::cout << "  ├─Subvolume: @home" << std::endl;
+    std::cout << "  ├─Subvolume: @var_log" << std::endl;
+    std::cout << "  ├─Subvolume: @pacman_pkg" << std::endl;
+    std::cout << "  ├─Subvolume: @swap" << std::endl;
+    std::cout << "  └─Subvolume: @snapshots" << std::endl << std::endl;
+    std::cout << "Region Settings" << std::endl;
+    std::cout << "├─Mirror Location: " << mirrorLocations << std::endl;
+    std::cout << "├─Timezone: " << timezonereal << std::endl;
+    std::cout << "└─Locale: " << locale << std::endl << std::endl;
+    std::cout << "Users" << std::endl;
+    std::cout << "├─Username: " << usernamereal << std::endl;
+    std::cout << "└─Root Account: ENABLED" << std::endl << std::endl;
+    std::cout << "Automatically Installed" << std::endl;
+    std::cout << "├─Rok AUR Helper (coming soon)" << std::endl;
+    std::cout << "└─System Drivers" << std::endl;
+    std::cout << "  ├─Video Drivers (Automatically Detected by the Installation Assistant)" << std::endl;
+    std::cout << "  ├─Audio Drivers (pipewire)" << std::endl;
+    std::cout << "  ├─Disk Support software" << std::endl;
+    std::cout << "  └─Extra Device Drivers" << std::endl << std::endl;
+    std::cout << "Once you're ready, press ENTER to begin installation." << std::endl;
+}
+
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
     welcome();
@@ -273,5 +306,6 @@ int main() {
     localeSetup();
     makeUser();
     makeUserPassword();
+    summary();
     return 0;
 }
