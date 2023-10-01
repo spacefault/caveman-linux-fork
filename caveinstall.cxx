@@ -86,8 +86,7 @@ void netCheck() {
     std::cout << "\033[1mChecking Network Connection - Caveman Linux Installation Assistant\033[0m" << std::endl;
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
     std::cout << "The Installation assistant is detecting active network connections. Please wait..." << std::endl;
-    std::cout << "Connecting to: archlinux.org" <<std::endl <<std::endl;
-    int netConnected = system("ping -c4 archlinux.org");
+    int netConnected = system("ping -c4 archlinux.org > /dev/null");
     if (netConnected == 0) {
         std::cout << "\033[1;32mNetwork Connection found! Resuming Installation..\033[0m" << std::endl;
         sleep(5);
