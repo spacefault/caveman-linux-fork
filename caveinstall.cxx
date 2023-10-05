@@ -12,7 +12,6 @@ std::string mirrorLocations;
 std::string timezonereal;
 std::string locale;
 std::string password;
-// std::string usernamereal;
 
 
 void checkUser() {
@@ -176,7 +175,6 @@ void localeSetup() {
 
 void makeUser() {
     std::vector<std::string> reservedUsernames;
-    std::string usernamereal;
     std::ifstream file("reserved_usernames.txt");
     std::string line;
 
