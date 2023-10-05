@@ -13,7 +13,6 @@ std::string timezonereal;
 std::string locale;
 std::string password;
 
-
 void checkUser() {
     uid_t uid = geteuid();
     if (uid != 0) {
@@ -290,8 +289,10 @@ void summary() {
     std::cout << "  ├─Audio Drivers (pipewire)" << std::endl;
     std::cout << "  ├─Disk Support software" << std::endl;
     std::cout << "  └─Extra Device Drivers" << std::endl << std::endl;
-    std::cout << "Once you're ready, press ENTER to begin installation." << std::endl;
+    std::cout << "Once you're ready, please press ENTER to begin installation." << std::endl;
+    system("read");
 }
+
 
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
