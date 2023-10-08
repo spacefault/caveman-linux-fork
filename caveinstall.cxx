@@ -294,6 +294,33 @@ void summary() {
 }
 
 
+void confirm() {
+    system("clear");
+    std::cout << "\033[1mConfirmation Required - Caveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "\033[1;31m>>> CONFIRMATION REQUIRED <<<\033[0m" << std::endl << std::endl;
+    std::cout << "The installer requires your confirmation to continue." << std::endl;
+    std::cout << "Please enter the following (without the quotes): " << std::endl << std::endl;
+    std::cout << "'InstallCavemanLinux'" << std::endl << std::endl;
+    std::cout << "then press ENTER to begin installation." << std::endl << std::endl;
+    std::cout << ">>> ";
+    std::string verifyString = "InstallCavemanLinux";
+    std::string userInput;
+
+    while (true) {
+        std::cout << ">>> ";
+        std::cin >> userInput;
+
+        if (userInput == verifyString) {
+            std::cout << "\033[1;32mVerified! Resuming installation...\033[0m" << std::endl;
+            break;
+        } else {
+            std::cout << "\033[1;31mVerification failed, please try again.\033[0m" << std::endl;
+        }
+    }
+}
+
+
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
     welcome();
@@ -305,5 +332,6 @@ int main() {
     makeUser();
     makeUserPassword();
     summary();
+    confirm();
     return 0;
 }
