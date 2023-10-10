@@ -303,7 +303,6 @@ void confirm() {
     std::cout << "Please enter the following (without the quotes): " << std::endl << std::endl;
     std::cout << "'InstallCavemanLinux'" << std::endl << std::endl;
     std::cout << "then press ENTER to begin installation." << std::endl << std::endl;
-    std::cout << ">>> ";
     std::string verifyString = "InstallCavemanLinux";
     std::string userInput;
 
@@ -319,7 +318,6 @@ void confirm() {
         }
     }
 }
-
 
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
