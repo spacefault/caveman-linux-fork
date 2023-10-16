@@ -12,6 +12,7 @@ std::string mirrorLocations;
 std::string timezonereal;
 std::string locale;
 std::string password;
+std::string confirmPassword;
 
 void checkUser() {
     uid_t uid = geteuid();
@@ -53,7 +54,7 @@ void welcome() {
         std::cin >> choice;
         if (choice == 1) {
             return;
-                     }
+        }
         else if (choice == 2) {
             system("clear");
             std::cout << "\033[1;31m>>> ENTERED SHELL <<<\033[0m" << std::endl << std::endl;
@@ -65,12 +66,12 @@ void welcome() {
             exit(0);
         }
         else if (choice == 3) {
-             system("clear");
-             std::cout << "Shutting down" << std::endl;
-             sleep(5);
-             // system("shutdown now");
-             return;
-         }
+            system("clear");
+            std::cout << "Shutting down" << std::endl;
+            sleep(5);
+            // system("shutdown now");
+            return;
+        }
         else {
             std::cout << "Invalid choice. Select a valid option (1/2/3). " <<  std::endl;
         }
@@ -224,40 +225,25 @@ void makeUser() {
 
 void makeUserPassword() {
     system("clear");
-
-    std::cout << "\033[1mUser Configuration - Configuring Passwords - Caveman Linux Installation Assistant\033[0m" << std::endl;
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-    std::cout << "This screen will assist you in setting up a password for your system." << std::endl;
-    std::cout << "The password you choose will also be used for the root account on the computer." << std::endl << std::endl;
-    std::cout << "Your password must be at least 10 characters long, must contain 2 special characters, and must have 3 uppercase letters." << std::endl;
-    std::cout << "Make sure this password is secure and complicated, write it down, and DO NOT SHARE IT TO ANYONE." << std::endl << std::endl;
-    std::cout << "Please enter your password now:" << std::endl;
-
-    while (true) {
+    bool acceptable = false;
+    std::cout << ">>> "; std::cout << "Please enter your password now: ";
+    std::cin >> password;
+    int specialCharCount = 0;
+    int capitalLetterCount = 0;
+    do {
+        std::cout << "Please enter your password again:" << std::endl;
         std::cout << ">>> ";
-        std::cin >> password;
-        int specialCharCount = 0;
-        int capitalLetterCount = 0;
-        if (password.length() < 10) {
-            std::cout << "\033[1;31mPassword does not meet the requirements. Please try again.\033[0m" << std::endl;
-            continue;
-        }
-        for (char c : password) {
-            if (!isalnum(c) && c != ' ') {
-                specialCharCount++;
-            }
-            if (isupper(c)) {
-                capitalLetterCount++;
-            }
-        }
-        if (specialCharCount >= 2 && capitalLetterCount >= 3) {
-            std::cout << "\033[1;32mPassword is valid! Resuming installation...\033[0m" << std::endl;
-            sleep(5);
-            break; // Break out of the loop if the password is valid
+        std::cin >> confirmPassword;
+        if (password == confirmPassword) {
+            acceptable = true;
         } else {
-            std::cout << "\033[1;31mPassword does not meet the requirements. Please try again.\033[0m" << std::endl;
+            password = "";
+            system("clear");
+            std::cout << "\033[1;31mPasswords do not match. Please try again.\033[0m" << "\n" << std::endl;
+            std::cout << ">>> "; std::cout << "Please enter your password now: ";
+            std::cin >> password;
         }
-    }
+    } while (!acceptable);
 }
 
 void summary() {
@@ -292,7 +278,6 @@ void summary() {
     std::cout << "Once you're ready, please press ENTER to begin installation." << std::endl;
     system("read");
 }
-
 
 void confirm() {
     system("clear");
