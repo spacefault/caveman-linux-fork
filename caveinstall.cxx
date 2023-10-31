@@ -5,6 +5,10 @@
 #include <vector>
 #include <cctype>
 #include <algorithm>
+#include <cstdlib>
+#include <pthread.h>
+#include <thread>
+#include <chrono>
 
 std::string usernamereal;
 std::string targetDisk;
@@ -304,17 +308,199 @@ void confirm() {
     }
 }
 
+void* installThread(void* arg) {
+    std::cout << "Performing installation steps..." << std::endl << std::endl;
+
+    // Check network connection
+    system("clear");
+    std::cout << "\033[1mInstalling - Caveman Linux Installation" << targetDisk << "Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes, and don't touch your computer." << std::endl << std::endl;
+    std::cout << "======== Installation Stages ========" << std::endl << std::endl;
+    std::cout << "\033[1m>> Preparing for Installation <<\033[0m" << std::endl;
+    std::cout << "Formatting & Partitioning Disks" << std::endl;
+    std::cout << "Installing the base system" << std::endl;
+    std::cout << "Configuring Mirrors" << std::endl;
+    std::cout << "Setting up Locales & Timezones" << std::endl;
+    std::cout << "Making users" << std::endl;
+    std::cout << "Installing Bootloader" << std::endl;
+    std::cout << "Finalizing Installation" << std::endl;
+    std::cout << "" << std::endl;
+    system("ping -c 3 www.google.com > /dev/null");
+    system("sed -i '/^#.*ParallelDownloads =.*/s/^#//' /etc/pacman.conf; sed -i '/^#.*ParallelDownloads =.*/s/[[:digit:]]*/10/' /etc/pacman.conf");
+    system("rankmirrors -n 10 /etc/pacman/.d/mirrorlist");
+    system("pacman -Sy");
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Disk Setup
+    system("clear");
+    std::cout << "\033[1mInstalling - Caveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes, and don't touch your computer." << std::endl << std::endl;
+    std::cout << "======== Installation Stages ========" << std::endl << std::endl;
+    std::cout << "Preparing for Installation" << std::endl;
+    std::cout << "\033[1m>> Formatting & Partitioning Disks <<\033[0m" << std::endl;
+    std::cout << "Installing the base system" << std::endl;
+    std::cout << "Configuring Mirrors" << std::endl;
+    std::cout << "Setting up Locales & Timezones" << std::endl;
+    std::cout << "Making users" << std::endl;
+    std::cout << "Installing Bootloader" << std::endl;
+    std::cout << "Finalizing Installation" << std::endl;
+    std::cout << "" << std::endl;
+    std::string diskMakeGpt = "parted -s " + targetDisk + " mklabel gpt";
+    std::string diskSetUnit = "parted -s " + targetDisk + " unit MiB";
+    std::string diskMakeEfiPartition = "parted -s " + targetDisk + " mkpart primary fat32 1MiB 700M";
+    std::string diskSetEfiFlags = "parted -s " + targetDisk + " set 1 esp on";
+    std::string diskMakeEfiLabel = "parted -s " + targetDisk + " name 1 EFI";
+    std::string diskMakeRootPartition = "parted -s " + targetDisk + " mkpart primary ext4 700M -1s";
+    std::string diskMakeRootLabel = "parted -s " + targetDisk + " name 2 root";
+    std::string diskMountEfi = "mount" + targetDisk + " name 2 root";
+    system(diskMakeGpt.c_str());
+    system(diskSetUnit.c_str());
+    system(diskMakeEfiPartition.c_str());
+    system(diskSetEfiFlags.c_str());
+    system(diskMakeEfiLabel.c_str());
+    system(diskMakeRootPartition.c_str());
+    system(diskMakeRootLabel.c_str());
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Installing base system
+    system("clear");
+    std::cout << "\033[1mInstalling - Caveman Linux Installation" << targetDisk << "Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes, and don't touch your computer." << std::endl << std::endl;
+    std::cout << "======== Installation Stages ========" << std::endl << std::endl;
+    std::cout << "Preparing for Installation" << std::endl;
+    std::cout << "Formatting & Partitioning Disks" << std::endl;
+    std::cout << "\033[1m>> Installing the base system <<\033[0m" << std::endl;
+    std::cout << "Configuring Mirrors" << std::endl;
+    std::cout << "Setting up Locales & Timezones" << std::endl;
+    std::cout << "Making users" << std::endl;
+    std::cout << "Installing Bootloader" << std::endl;
+    std::cout << "Finalizing Installation" << std::endl;
+    std::cout << "" << std::endl;
+    system("pacstrap /mnt base base-devel linux linux-headers linux-firmware sudo nano vim git neofetch networkmanager dhcpcd pipewire wpa_supplicant gnome gdm reflector"); // system ucode and drivers will be added soon
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Setting Up Mirrors
+    system("clear");
+    std::cout << "\033[1mInstalling - Caveman Linux Installation" << targetDisk << "Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes, and don't touch your computer." << std::endl << std::endl;
+    std::cout << "======== Installation Stages ========" << std::endl << std::endl;
+    std::cout << "Preparing for Installation" << std::endl;
+    std::cout << "Formatting & Partitioning Disks" << std::endl;
+    std::cout << "Installing the base system" << std::endl;
+    std::cout << "\033[1m>> Configuring Mirrors <<\033[0m" << std::endl;
+    std::cout << "Setting up Locales & Timezones" << std::endl;
+    std::cout << "Making users" << std::endl;
+    std::cout << "Installing Bootloader" << std::endl;
+    std::cout << "Finalizing Installation" << std::endl;
+    std::cout << "" << std::endl;
+    std::string mirrorConfig = "reflector --country" + mirrorLocations + " --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist --verbose";
+    std::string mirrorXDGLocation = "echo --country" + mirrorLocations + " >> /etc/xdg/reflector/reflector.conf";
+    system("cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak");
+    system(mirrorConfig.c_str());
+    system("echo --save /etc/pacman.d/mirrorlist >> /etc/xdg/reflector/reflector.conf");
+    system(mirrorXDGLocation.c_str());
+    system("echo --protocol https >> /etc/xdg/reflector/reflector.conf");
+    system("echo --latest 10 >> /etc/xdg/reflector/reflector.conf");
+    system("echo --sort-rate >> /etc/xdg/reflector/reflector.conf")
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Locales & region (to be refactored)
+    // to be added
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Create user account
+    system("clear");
+    std::cout << "\033[1mInstalling - Caveman Linux Installation" << targetDisk << "Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes, and don't touch your computer." << std::endl << std::endl;
+    std::cout << "======== Installation Stages ========" << std::endl << std::endl;
+    std::cout << "Preparing for Installation" << std::endl;
+    std::cout << "Formatting & Partitioning Disks" << std::endl;
+    std::cout << "Installing the base system" << std::endl;
+    std::cout << "Configuring Mirrors" << std::endl;
+    std::cout << "Setting up Locales & Timezones" << std::endl;
+    std::cout << "\033[1m>> Making users <<\033[0m" << std::endl;
+    std::cout << "Installing Bootloader" << std::endl;
+    std::cout << "Finalizing Installation" << std::endl;
+    std::cout << "" << std::endl;
+    std::string makeUser = "useradd -m -s /bin/bash" + usernamereal;
+    std::string makeUserGroups = "usermod -aG wheel,storage,power" + usernamereal;
+    std::string makeUserPassword = "echo" + password + "| passwd --stdin" + usernamereal;
+    system(makeUser.c_str());
+    system(makeUserGroups.c_str());
+    system(makeUserPassword.c_str());
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Installing Bootloader
+    // [to be added]
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Finalizing installation
+    // [to be added]
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // std::cout << std::endl;
+    // std::cout << "\033[1;32mInstallation complete!\033[0m" << std::endl;
+
+    // // Wait for 10 seconds before rebooting
+    // std::cout << "Rebooting in 10 seconds..." << std::endl;
+    // for (int i = 10; i >= 1; i--) {
+    //     std::cout << "\r" << i << " seconds remaining...";
+    //     std::cout.flush();
+    //     std::this_thread::sleep_for(std::chrono::seconds(1));
+    // }
+
+    // // Reboot the computer
+    // std::cout << std::endl;
+    // std::cout << "Rebooting..." << std::endl;
+    // sleep(1);
+    // reboot(RB_AUTOBOOT);
+
+    return NULL;
+}
+
+void installCavemanLinux() {
+    std::cout << "\033[1mCaveman Linux Installation Assistant\033[0m" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "The installer will now install Caveman Linux." << std::endl;
+    std::cout << "Please wait while the installation completes." << std::endl << std::endl;
+
+    pthread_t thread;
+    pthread_create(&thread, NULL, installThread, NULL);
+    std::cout << std::endl;
+
+    const char* spinner = "|/-\\";
+    int i = 0;
+    while (true) {
+        std::cout << "\rInstalling Caveman Linux [" << spinner[i % 4] << "]";
+        std::cout.flush();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        i++;
+    }
+
+    pthread_join(thread, NULL);
+}
 int main() {
 //    checkUser(); TO BE UNCOMMENTED ON RELEASE, it's uncommented for now to make testing easier
-    welcome();
-    netCheck();
-    diskSetup();
-    mirrorSetup();
-    timezoneSetup();
-    localeSetup();
-    makeUser();
-    makeUserPassword();
-    summary();
-    confirm();
+    // welcome();
+    // netCheck();
+    // diskSetup();
+    // mirrorSetup();
+    // timezoneSetup();
+    // localeSetup();
+    // makeUser();
+    // makeUserPassword();
+    // summary();
+    // confirm();
+    installCavemanLinux();
     return 0;
 }
